@@ -8,7 +8,7 @@ defmodule TENDER do
       app = Supervisor.start_link([], strategy: :one_for_one, name: TENDER)
       pass = :application.get_env(:n2o, :tender_pass,  "")
       login = :application.get_env(:n2o, :tender_login, "")
-      :n2o_pi.start(N2O.pi(module: CIPHER, table: :cipher, sup: TENDER,
+      :n2o_pi.start(N2O.pi(module: TENDER, table: :cipher, sup: TENDER,
               state: {"tenderLink", login, pass, 0}, name: "tenderLink"))
       app
   end
@@ -37,10 +37,10 @@ defmodule TENDER do
 
   # helpers
 
-  def error(f, x), do: :logger.error(:io_lib.format('CIPHER ' ++ f, x))
-  def warning(f, x), do: :logger.warning(:io_lib.format('CIPHER ' ++ f, x))
-  def debug(f, x), do: :logger.debug(:io_lib.format('CIPHER ' ++ f, x))
-  def info(f, x), do: :logger.info(:io_lib.format('CIPHER ' ++ f, x))
+  def error(f, x), do: :logger.error(:io_lib.format('TENDER ' ++ f, x))
+  def warning(f, x), do: :logger.warning(:io_lib.format('TENDER ' ++ f, x))
+  def debug(f, x), do: :logger.debug(:io_lib.format('TENDER ' ++ f, x))
+  def info(f, x), do: :logger.info(:io_lib.format('TENDER ' ++ f, x))
 
   # REST/JSON API
 

@@ -9,11 +9,11 @@ defmodule TENDER.UP do
         N2O.pi(
           module: __MODULE__,
           table: :cipher,
-          sup: CIPHER,
+          sup: TENDER,
           state: {login, pass, from, to, doc, []},
           name: doc)) do
-        {:error, x} -> TENDER.error 'CIPHER ERROR: ~p', [x]
-        x -> TENDER.warning 'CIPHER: ~p', [x]
+        {:error, x} -> TENDER.error 'TENDER ERROR: ~p', [x]
+        x -> TENDER.warning 'TENDER: ~p', [x]
       end
     end)
   end

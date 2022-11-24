@@ -4,7 +4,7 @@ defmodule TENDER.DOWN do
 
   def start(login, pass, msg) do
     spawn(fn ->
-      :n2o_pi.start(N2O.pi(module: __MODULE__, table: :tender, sup: CIPHER,
+      :n2o_pi.start(N2O.pi(module: __MODULE__, table: :tender, sup: TENDER,
          state: {"local", login, pass, msg, true, []}, name: msg)) end)
   end
 
