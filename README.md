@@ -40,10 +40,25 @@ $ iex -S mix
 ```
 
 ```
-> :supervisor.which_children TENDER
+> TENDER.getPlan 299107
+
 [
-  {{:tender, 'c9983ae3f517fbc9a147d5c34f22932f42fe965b'}, #PID<0.465.0>, :worker, [TENDER.DOWN]},
-  {{:tender, "tenderLink"}, #PID<0.219.0>, :worker, [TENDER]}
+  mode: "real",
+  tender: [
+    procurementMethodType: "reporting",
+    tenderPeriod: [dateStart: "2021-12-01T00:00:00"]
+  ],
+  classification: [id: "18140000-2", scheme: "ДК021"],
+  additionalClassification: [],
+  organizer: [
+    contactPoint: [email: "KLIUKVIN@IT.UA"], 
+    title: "Astartia-Энергетика",
+    usreou: "77788899"
+  ],
+  dateCreated: "2021-05-25T16:49:49.193",
+  status: "draft",
+  id: 299107,
+  dateCreated: "2021-05-25T16:49:49.193"
 ]
 ```
 
