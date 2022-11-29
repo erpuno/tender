@@ -44,116 +44,70 @@ defmodule TENDER do
 
   # REST/JSON API
 
+  def to_list(x) when is_integer(x), do: :erlang.integer_to_list(x)
+  def to_list(x) when is_binary(x), do: :erlang.binary_to_list(x)
+  def to_list(x) when is_map(x), do: :maps.to_list(x)
+  def to_list(x) when is_list(x), do: x
+  def to_list(x), do: :io_lib.format '~p', [x]
+
+  def to_atom(x) when is_integer(x), do: :erlang.list_to_atom(:erlang.integer_to_list(x))
+  def to_atom(x) when is_binary(x), do: :erlang.list_to_atom(:erlang.binary_to_list(x))
+  def to_atom(x), do: :io_lib.format '~p', [x]
+
+  def decode(""), do: []
+  def decode(x), do: :jsone.decode(x)
+
   def cancel(doc), do: spawn(fn -> :timer.sleep(2000) ; :n2o_pi.stop(:cipher, doc) end)
 
-  def publish(bearer,id,_) do
-      url = :application.get_env(:n2o, :tender_upload, []) ++ id
-      headers = [{'Authorization',bearer}]
-      {:ok,{status,_headers,body}} = :httpc.request(:put, {url, headers},
-                                    [{:timeout,100000}], [{:body_format,:binary}])
-      TENDER.debug 'PUBLISH: ~ts ~p', [id,status]
-      body
-  end
+  def convert(list) when is_list(list), do: :lists.map fn {k,v} -> {to_atom(k),convert(v)} end, list
+  def convert(list) when is_map(list), do: convert(:maps.to_list(list))
+  def convert(x), do: x
 
-  def metainfo(bearer,id,doc) do
-      author = [firstName: "Максим",
-                surname: "Сохацький",
-                position: "Провідний інженер",
-                department: "Розробки інформаційних систем",
-                organization: "ІНФОТЕХ"]
-
-      body = :jsone.encode([fileName: doc, description: "Бінарний файл", ownNumber: "123/20",
-                            comment: "Коментар від архіваріуса", authors: [author], outerId: "123/20"])
-      url = :application.get_env(:n2o, :tender_upload, []) ++ id ++ '/metadata'
-      app_json = 'application/json'
-      headers = [{'Content-Type',app_json},{'Authorization',bearer}]
-      {:ok,{status,_headers,body}} = :httpc.request(:put, {url, headers, app_json, body},
-                                    [{:timeout,100000}], [{:body_format,:binary}])
-      case status do
-         {_,200,_} -> TENDER.debug 'METAINFO: ~ts ~p', [id,status]
-           _ -> res = :jsone.decode body
-                msg = :maps.get "message", res
-                code = :maps.get "code", res
-                TENDER.error 'METAINFO: id: ~ts, code: ~ts, message: ~ts', [id,code,msg]
-      end
-      body
-  end
-
-  def upload(bearer,doc) do
-      case :file.read_file(doc) do
-         {:error, reason} -> {[],reason}
-         {:ok, file} ->
-      file_len = :io_lib.format('~p',[:erlang.size(file)])
-      url = :application.get_env(:n2o, :tender_upload, []) ++ '1'
-      TENDER.debug 'bearer: ~ts', [bearer]
-      octet = 'application/octet-stream'
-      headers = [{'Authorization',bearer},{'Content-Type',octet},{'Content-Length', file_len}]
-      {:ok,{status,_headers,body}} = :httpc.request(:post, {url, headers, octet, file},
-                                      [{:timeout,100000}], [{:body_format,:binary}])
-      TENDER.debug 'UPLOAD: ~p', [status]
-      res = :jsone.decode body
-      id = :maps.get("id", res, []) |> :erlang.binary_to_list
-      {id,res}
-      end
-  end
-
-  def uploadSignature(bearer,id,doc) do
-      case :file.read_file(doc <> ".p7s") do
-      {:error, _reason} -> TENDER.warning 'P7S is not available for ~p ~p.', [id,doc]
-      {:ok, file} ->
-         url = :application.get_env(:n2o, :tender_upload, []) ++ id ++ '/signature'
-         octet = 'application/octet-stream'
-         headers = [{'Authorization',bearer},{'Content-Type',octet}]
-         {:ok,{status,_headers,body}} = :httpc.request(:put, {url, headers, octet, file},
-                                      [{:timeout,100000}], [{:body_format,:binary}])
-         case status do
-            {_,200,_} -> TENDER.debug 'UPLOAD SIGNATURE: ~ts ~p', [id,status]
-              _ -> res = :jsone.decode body
-                   msg = :maps.get "message", res
-                   code = :maps.get "code", res
-                   TENDER.error 'UPLOAD SIGNATURE: id: ~ts, code: ~ts, message: ~ts', [id,code,msg]
-         end
-         {id,body}
-      end
-  end
-
-  def download(bearer,id) do
-      url = :application.get_env(:n2o, :tender_upload, []) ++ id ++ '/data'
-      headers = [{'Authorization',bearer}]
+  def getPlan(id) do
+      url = :application.get_env(:n2o, :tender_upload, []) ++ 'Plans/' ++ to_list(id)
+      bearer = :application.get_env(:n2o, :tender_bearer, [])
+      headers = [{'Authorization',bearer},{'accept','text/plain'}]
       {:ok,{status,_headers,body}} = :httpc.request(:get, {url, headers},
                                      [{:timeout,100000}], [{:body_format,:binary}])
-      TENDER.debug 'DOWNLOAD ~ts: ~p', [id,status]
-      {status,id,body}
-  end
-
-  def downloadSignature(bearer,id) do
-      url = :application.get_env(:n2o, :tender_upload, []) ++ id ++ '/signature'
-      headers = [{'Authorization',bearer}]
-      {:ok,{status,_headers,body}} = :httpc.request(:get, {url, headers},
-                                      [{:timeout,100000}], [{:body_format,:binary}])
-      case status do
-        {_,200,_} -> TENDER.debug 'DOWNLOAD SIGNATURE: ~ts ~p', [id,status]
-          _ -> res = :jsone.decode body
-               msg = :maps.get "message", res
-               code = :maps.get "code", res
-               TENDER.error 'DOWNLOAD SIGNATURE: id: ~ts, code: ~ts, message: ~ts', [id,code,msg]
+      json = case decode(body) do
+         x when is_map(x) ->
+            [  mode: :maps.get("mode", x, []),
+               tender: convert(:maps.get("tender", x, []) |> :maps.to_list),
+               classification: convert(:maps.get("classification", x, [])),
+               additionalClassification: :maps.get("additionalClassification", x, []),
+               organizer: convert(:maps.get("organizer", x, [])),
+               dateCreated: :maps.get("dateCreated", x, []),
+               status: :maps.get("status", x, []),
+               id: :maps.get("id", x, []),
+               externalId: :maps.get("externalId", x, []),
+               cdbId: :maps.get("cdbId", x, []),
+               items: :maps.get("items", x, []),
+               dateModified: :maps.get("dateModifed", x, []),
+               datePublished: :maps.get("datePublished", x, []),
+               dateCreated: :maps.get("dateCreated", x, []),
+            ]
+        _ -> []
       end
-      {status,id,:jsone.decode(body)}
+      json
   end
 
-  def auth(login,pass) do
-      url = :application.get_env(:n2o, :tender_auth, [])
-      body = :jsone.encode([grant_type: "password", username: login, client_id: "arch-client", password: pass])
-      len = :io_lib.format('~p',[:erlang.size(body)])
-      app_json = 'application/json'
-      headers = [{'Content-Type',app_json},{'Content-Length', len}]
-      {:ok,{_status,_headers,body}} = :httpc.request(:post, {url, headers, app_json, body},
-                                    [{:timeout,10000}], [{:body_format,:binary}])
-      res = :jsone.decode body
-      bearer = :maps.get "token_type", res
-      TENDER.debug 'AUTH: ~p', [bearer]
-      token = :maps.get "access_token", res
-      bearer <> " " <> token |> :erlang.binary_to_list
+  def listPlans() do
+      url = :application.get_env(:n2o, :tender_upload, []) ++ 'Plans'
+      bearer = :application.get_env(:n2o, :tender_bearer, [])
+      headers = [{'Authorization',bearer},{'accept','text/plain'}]
+      {:ok,{status,_headers,body}} = :httpc.request(:get, {url, headers},
+                                     [{:timeout,100000}], [{:body_format,:binary}])
+      json = case :jsone.decode(body) do
+         x = %{} -> x
+         _ -> []
+      end
+      lastDateModified = :maps.get("lastDateModified", json)
+      data = :maps.get("data", json)
+      list = :lists.map fn map  -> 
+                     dateModified = :maps.get "dateModified", map, []
+                     id = :maps.get "id", map, []
+                     {dateModified,id} end, data
+      [lastDateModified: lastDateModified, data: list]
   end
 
 end

@@ -8,15 +8,9 @@ defmodule TENDER.DOWN do
          state: {"local", login, pass, msg, true, []}, name: msg)) end)
   end
 
-  def proc(:init, N2O.pi(state: {_, login, pass, msg_id, _, _}) = pi) do
-      bearer = case :application.get_env(:n2o, :jwt_prod, false) do
-          false -> :application.get_env(:n2o, :tender_bearer, [])
-          true -> TENDER.auth(login, pass)
-      end
-      TENDER.download(bearer, msg_id) |> savePayload
-      TENDER.downloadSignature(bearer, msg_id) |> saveSignatures
-      TENDER.cancel(msg_id)
-      {:ok, pi}
+  def proc(:init, N2O.pi(state: {x, login, pass, msg_id, y, _})) do
+      bearer = :application.get_env(:n2o, :tender_bearer, [])
+      {:ok, {x, login, pass, msg_id, y, bearer}}
   end
 
   def proc(_,pi) do
