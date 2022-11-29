@@ -3,7 +3,6 @@ ebin
 *.gz
 *.dump
 .applist
-config/config.exs
 rocksdb/
 deps/
 _build/
