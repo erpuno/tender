@@ -107,7 +107,6 @@ defmodule TENDER do
          _ -> info 'ERROR/participationRequest: ~p', [body]
 
       end
-      
   end
 
   def addFile(id) do
@@ -146,15 +145,15 @@ defmodule TENDER do
 
   def createTender() do
       json = [
-         title: "Предмет тендера",
-         description: "Описание тендера",
+         title: "Предмет тендеру ІНФОТЕХ ТЕСТ",
+         description: "Опис тендеру ІНФОТЕХ ТЕСТ",
          mode: "test",
          procurementMethodType: "belowThreshold",
          mainProcurementCategory: "works",
-         organizer: [contactPoint: [login: "test@it.ua"]],
-         enquiryPeriod: [dateEnd: "2019-01-01T00:00:00"],
-         tenderPeriod: [dateStart: "2019-01-01T00:00:00", dateEnd: "2019-05-01T00:00:00"],
-         lots: [ [title: "Предмет лота", description: "Опис", value: [valueAddedTaxIncluded: true, amount: 100000, currency: "UAH"],
+         organizer: [contactPoint: [login: "testOrganizerWebApi@smarttender.biz"]],
+         enquiryPeriod: [dateEnd: "2019-12-16T00:00:00"],
+         tenderPeriod: [dateStart: "2019-12-13T00:00:00", dateEnd: "2019-12-24T00:00:00"],
+         lots: [ [title: "Предмет лоту", description: "Опис", value: [valueAddedTaxIncluded: true, amount: 100000, currency: "UAH"],
                 minimalStep: 3000, paymentTerms: [
                     [
                         type: "prepayment",
@@ -164,13 +163,13 @@ defmodule TENDER do
                         description: "Опис...",
                         percentage: 100
                     ] ],
-               items: [ [ description: "Описание номенклатуры",
+               items: [ [ description: "Опис номенклатури",
                           classification: [scheme: "ДК021", id: "22990000-6"],
                           additionalClassifications: [ [scheme: "ДКПП", id: "55.90"] ],
                           unitCode: "H87",
                           quantity: 346,
-                          deliveryDate: [dateStart: "2019-06-01T00:00:00", dateEnd: "2020-05-01T00:00:00"],
-                          deliveryAddress: [postalCode: "03194", streetAddress: "Зодчих вул. 6а"]
+                          deliveryDate: [dateStart: "2019-12-30T00:00:00", dateEnd: "2019-12-31T00:00:00"],
+                          deliveryAddress: [postalCode: "03194", streetAddress: "Лесі Українки, 1"]
                       ] ]
                 ] ]
        ]
