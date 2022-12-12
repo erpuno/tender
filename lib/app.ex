@@ -152,7 +152,7 @@ defmodule TENDER do
          mainProcurementCategory: "works",
          organizer: [contactPoint: [login: "testOrganizerWebApi@smarttender.biz"]],
          enquiryPeriod: [dateEnd: "2022-12-16T00:00:00"],
-         tenderPeriod: [dateStart: "2022-12-17T00:00:00", dateEnd: "2022-12-24T00:00:00"],
+         tenderPeriod: [dateStart: "2022-12-17T00:00:00", dateEnd: "2022-12-21T00:00:00"],
          lots: [ [title: "Предмет лоту", description: "Опис", value: [valueAddedTaxIncluded: true, amount: 100000, currency: "UAH"],
                 minimalStep: 3000, paymentTerms: [
                     [
