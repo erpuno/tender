@@ -151,8 +151,8 @@ defmodule TENDER do
          procurementMethodType: "belowThreshold",
          mainProcurementCategory: "works",
          organizer: [contactPoint: [login: "testOrganizerWebApi@smarttender.biz"]],
-         enquiryPeriod: [dateEnd: "2019-12-16T00:00:00"],
-         tenderPeriod: [dateStart: "2019-12-13T00:00:00", dateEnd: "2019-12-24T00:00:00"],
+         enquiryPeriod: [dateEnd: "2022-12-16T00:00:00"],
+         tenderPeriod: [dateStart: "2022-12-17T00:00:00", dateEnd: "2022-12-24T00:00:00"],
          lots: [ [title: "Предмет лоту", description: "Опис", value: [valueAddedTaxIncluded: true, amount: 100000, currency: "UAH"],
                 minimalStep: 3000, paymentTerms: [
                     [
@@ -168,7 +168,7 @@ defmodule TENDER do
                           additionalClassifications: [ [scheme: "ДКПП", id: "55.90"] ],
                           unitCode: "H87",
                           quantity: 346,
-                          deliveryDate: [dateStart: "2019-12-30T00:00:00", dateEnd: "2019-12-31T00:00:00"],
+                          deliveryDate: [dateStart: "2022-12-30T00:00:00", dateEnd: "2022-12-31T00:00:00"],
                           deliveryAddress: [postalCode: "03194", streetAddress: "Лесі Українки, 1"]
                       ] ]
                 ] ]
