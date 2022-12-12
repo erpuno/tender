@@ -8,17 +8,17 @@ defmodule TENDER do
       app = Supervisor.start_link([], strategy: :one_for_one, name: TENDER)
       pass = :application.get_env(:n2o, :tender_pass,  "")
       login = :application.get_env(:n2o, :tender_login, "")
-      :n2o_pi.start(N2O.pi(module: TENDER, table: :cipher, sup: TENDER,
+      :n2o_pi.start(N2O.pi(module: TENDER, table: :tender, sup: TENDER,
               state: {"tenderLink", login, pass, 0}, name: "tenderLink"))
       app
   end
 
   def send(to, doc)  do
-      :gen_server.cast :n2o_pi.pid(:cipher, "tenderLink"), {:send, "tenderLink", to, doc}
+      :gen_server.cast :n2o_pi.pid(:tender, "tenderLink"), {:send, "tenderLink", to, doc}
   end
 
   def down(id)  do
-      :gen_server.cast :n2o_pi.pid(:cipher, "tenderLink"), {:download, id}
+      :gen_server.cast :n2o_pi.pid(:tender, "tenderLink"), {:download, id}
   end
 
   def proc(:init, pi) do
@@ -57,7 +57,7 @@ defmodule TENDER do
   def decode(""), do: []
   def decode(x), do: :jsone.decode(x)
 
-  def cancel(doc), do: spawn(fn -> :timer.sleep(2000) ; :n2o_pi.stop(:cipher, doc) end)
+  def cancel(doc), do: spawn(fn -> :timer.sleep(2000) ; :n2o_pi.stop(:tender, doc) end)
 
   def convert(list) when is_map(list) do
       convert(:maps.to_list(list))
