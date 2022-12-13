@@ -1,7 +1,7 @@
 TENDER: SmartTender Prozorro API SDK
 ====================================
 
-[![Hex pm](http://img.shields.io/hexpm/v/smarttender.svg?style=flat&x=1)](https://hex.pm/packages/smarttender)
+[![Hex pm](http://img.shields.io/hexpm/v/tender.svg?style=flat&x=1)](https://hex.pm/packages/tender)
 
 Інформація
 ----------
