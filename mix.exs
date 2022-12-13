@@ -3,7 +3,7 @@ defmodule TENDER.Mixfile do
 
   def project do
     [
-      app: :smarttender,
+      app: :tender,
       version: "0.11.0",
       description: "TENDER Smart Tender Prozorro Middleware",
       package: package(),
@@ -20,7 +20,7 @@ defmodule TENDER.Mixfile do
       files: ~w(lib mix.exs),
       licenses: ["ISC"],
       maintainers: ["Namdak Tonpa"],
-      name: :cipherarch,
+      name: :tender,
       links: %{"GitHub" => "https://github.com/erpuno/tender"}
     ]
   end
