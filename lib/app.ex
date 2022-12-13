@@ -109,6 +109,59 @@ defmodule TENDER do
       end
   end
 
+  def downloadFile(tender,file) do
+      url = :application.get_env(:n2o, :tender_upload, []) ++ 'Tenders/' ++ to_list(tender) ++ '/documents/' ++ to_list(file)
+      bearer = :application.get_env(:n2o, :tender_bearer, [])
+      accept = 'text/plain'
+      headers = [{'Authorization',bearer},{'accept',accept}]
+      {:ok,{{_,status,_},_headers,body}} = :httpc.request(:get, {url, headers},
+                                     [{:timeout,100000}], [{:body_format,:binary}])
+
+      case status do
+         200 ->
+              case decode(body) do
+                 y when is_map(y) ->
+                    [
+                       id: convert(:maps.get("id", y, [])),
+                       title: convert(:maps.get("title", y, [])),
+                       url: convert(:maps.get("url", y, [])),
+                       dateModified: convert(:maps.get("dateModified", y, [])),
+                    ]
+                 _ -> []
+              end
+         _ -> info 'ERROR/downloadFile: ~p', [status]
+
+      end
+  end
+
+  def listFiles(id) do
+      url = :application.get_env(:n2o, :tender_upload, []) ++ 'Tenders/' ++ to_list(id) ++ '/documents'
+      bearer = :application.get_env(:n2o, :tender_bearer, [])
+      accept = 'text/plain'
+      headers = [{'Authorization',bearer},{'accept',accept}]
+      {:ok,{{_,status,_},_headers,body}} = :httpc.request(:get, {url, headers},
+                                     [{:timeout,100000}], [{:body_format,:binary}])
+
+      case status do
+         200 ->
+              case decode(body) do
+                 x when is_list(x) ->
+                    :lists.map(fn y ->
+                    [
+                       id: convert(:maps.get("id", y, [])),
+                       title: convert(:maps.get("title", y, [])),
+                       url: convert(:maps.get("url", y, [])),
+                       dateModified: convert(:maps.get("dateModified", y, [])),
+                    ]
+                    end, x)
+                 _ -> []
+              end
+         _ -> info 'ERROR/listFiles: ~p', [status]
+
+      end
+      
+  end
+
   def addFile(id) do
 
       json = [
