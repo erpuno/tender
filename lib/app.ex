@@ -572,6 +572,150 @@ defmodule TENDER do
                      {id,title} end, json
   end
 
+  def catCities() do
+      url = :application.get_env(:n2o, :tender_upload, []) ++ 'ReferenceBooks/cities'
+      bearer = :application.get_env(:n2o, :tender_bearer, [])
+      headers = [{'Authorization',bearer},{'accept','*'}]
+      {:ok,{status,_headers,body}} = :httpc.request(:get, {url, headers},
+                                     [{:timeout,100000},verify()], [{:body_format,:binary}])
+      json = :jsone.decode(body)
+      :lists.map fn map  -> 
+                     cn = :maps.get "countryName", map, []
+                     region = :maps.get "region", map, []
+                     locality = :maps.get "locality", map, []
+                     {cn,region,locality} end, json
+  end
+
+  def catMainProcurementCategories() do
+      url = :application.get_env(:n2o, :tender_upload, []) ++ 'ReferenceBooks/mainProcurementCategories'
+      bearer = :application.get_env(:n2o, :tender_bearer, [])
+      headers = [{'Authorization',bearer},{'accept','*'}]
+      {:ok,{status,_headers,body}} = :httpc.request(:get, {url, headers},
+                                     [{:timeout,100000},verify()], [{:body_format,:binary}])
+      json = :jsone.decode(body)
+      :lists.map fn map  -> 
+                     title = :maps.get "title", map, []
+                     id = :maps.get "id", map, []
+                     {id,title} end, json
+  end
+
+  def catDayTypes() do
+      url = :application.get_env(:n2o, :tender_upload, []) ++ 'ReferenceBooks/dayTypes'
+      bearer = :application.get_env(:n2o, :tender_bearer, [])
+      headers = [{'Authorization',bearer},{'accept','*'}]
+      {:ok,{status,_headers,body}} = :httpc.request(:get, {url, headers},
+                                     [{:timeout,100000},verify()], [{:body_format,:binary}])
+      json = :jsone.decode(body)
+      :lists.map fn map  -> 
+                     title = :maps.get "title", map, []
+                     id = :maps.get "id", map, []
+                     {id,title} end, json
+  end
+
+  def catPaymentTermEvents() do
+      url = :application.get_env(:n2o, :tender_upload, []) ++ 'ReferenceBooks/paymentTermEvents'
+      bearer = :application.get_env(:n2o, :tender_bearer, [])
+      headers = [{'Authorization',bearer},{'accept','*'}]
+      {:ok,{status,_headers,body}} = :httpc.request(:get, {url, headers},
+                                     [{:timeout,100000},verify()], [{:body_format,:binary}])
+      json = :jsone.decode(body)
+      :lists.map fn map  -> 
+                     title = :maps.get "title", map, []
+                     id = :maps.get "id", map, []
+                     {id,title} end, json
+  end
+
+  def catPaymentTermTypes() do
+      url = :application.get_env(:n2o, :tender_upload, []) ++ 'ReferenceBooks/paymentTermTypes'
+      bearer = :application.get_env(:n2o, :tender_bearer, [])
+      headers = [{'Authorization',bearer},{'accept','*'}]
+      {:ok,{status,_headers,body}} = :httpc.request(:get, {url, headers},
+                                     [{:timeout,100000},verify()], [{:body_format,:binary}])
+      json = :jsone.decode(body)
+      :lists.map fn map  -> 
+                     title = :maps.get "title", map, []
+                     id = :maps.get "id", map, []
+                     {id,title} end, json
+  end
+
+  def catComplaintTypes() do
+      url = :application.get_env(:n2o, :tender_upload, []) ++ 'ReferenceBooks/complaintTypes'
+      bearer = :application.get_env(:n2o, :tender_bearer, [])
+      headers = [{'Authorization',bearer},{'accept','*'}]
+      {:ok,{status,_headers,body}} = :httpc.request(:get, {url, headers},
+                                     [{:timeout,100000},verify()], [{:body_format,:binary}])
+      json = :jsone.decode(body)
+      :lists.map fn map  -> 
+                     title = :maps.get "title", map, []
+                     id = :maps.get "id", map, []
+                     {id,title} end, json
+  end
+
+  def catComplaintStatuses() do
+      url = :application.get_env(:n2o, :tender_upload, []) ++ 'ReferenceBooks/complaintStatuses'
+      bearer = :application.get_env(:n2o, :tender_bearer, [])
+      headers = [{'Authorization',bearer},{'accept','*'}]
+      {:ok,{status,_headers,body}} = :httpc.request(:get, {url, headers},
+                                     [{:timeout,100000},verify()], [{:body_format,:binary}])
+      json = :jsone.decode(body)
+      :lists.map fn map  -> 
+                     title = :maps.get "title", map, []
+                     id = :maps.get "id", map, []
+                     {id,title} end, json
+  end
+
+  def catBidStatuses() do
+      url = :application.get_env(:n2o, :tender_upload, []) ++ 'ReferenceBooks/bidStatuses'
+      bearer = :application.get_env(:n2o, :tender_bearer, [])
+      headers = [{'Authorization',bearer},{'accept','*'}]
+      {:ok,{status,_headers,body}} = :httpc.request(:get, {url, headers},
+                                     [{:timeout,100000},verify()], [{:body_format,:binary}])
+      json = :jsone.decode(body)
+      :lists.map fn map  -> 
+                     title = :maps.get "title", map, []
+                     id = :maps.get "id", map, []
+                     {id,title} end, json
+  end
+
+  def catAwardStatuses() do
+      url = :application.get_env(:n2o, :tender_upload, []) ++ 'ReferenceBooks/awardStatuses'
+      bearer = :application.get_env(:n2o, :tender_bearer, [])
+      headers = [{'Authorization',bearer},{'accept','*'}]
+      {:ok,{status,_headers,body}} = :httpc.request(:get, {url, headers},
+                                     [{:timeout,100000},verify()], [{:body_format,:binary}])
+      json = :jsone.decode(body)
+      :lists.map fn map  -> 
+                     title = :maps.get "title", map, []
+                     id = :maps.get "id", map, []
+                     {id,title} end, json
+  end
+
+  def catContractStatuses() do
+      url = :application.get_env(:n2o, :tender_upload, []) ++ 'ReferenceBooks/contractStatuses'
+      bearer = :application.get_env(:n2o, :tender_bearer, [])
+      headers = [{'Authorization',bearer},{'accept','*'}]
+      {:ok,{status,_headers,body}} = :httpc.request(:get, {url, headers},
+                                     [{:timeout,100000},verify()], [{:body_format,:binary}])
+      json = :jsone.decode(body)
+      :lists.map fn map  -> 
+                     title = :maps.get "title", map, []
+                     id = :maps.get "id", map, []
+                     {id,title} end, json
+  end
+
+  def catPreQualificationStatuses() do
+      url = :application.get_env(:n2o, :tender_upload, []) ++ 'ReferenceBooks/preQualificationStatuses'
+      bearer = :application.get_env(:n2o, :tender_bearer, [])
+      headers = [{'Authorization',bearer},{'accept','*'}]
+      {:ok,{status,_headers,body}} = :httpc.request(:get, {url, headers},
+                                     [{:timeout,100000},verify()], [{:body_format,:binary}])
+      json = :jsone.decode(body)
+      :lists.map fn map  -> 
+                     title = :maps.get "title", map, []
+                     id = :maps.get "id", map, []
+                     {id,title} end, json
+  end
+
   def dumpDKPP() do
       x = TENDER.classificationSchemes "ДКПП"
       :lists.map fn {x,y} -> :io.format '~ts:~ts~n', [x,y] end, :lists.sort(x)
