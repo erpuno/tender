@@ -412,4 +412,44 @@ defmodule TENDER do
       [lastDateModified: lastDateModified, data: list]
   end
 
+  def catTenderStatuses() do
+      url = :application.get_env(:n2o, :tender_upload, []) ++ 'ReferenceBooks/tenderStatuses'
+      bearer = :application.get_env(:n2o, :tender_bearer, [])
+      headers = [{'Authorization',bearer},{'accept','*'}]
+      {:ok,{status,_headers,body}} = :httpc.request(:get, {url, headers},
+                                     [{:timeout,100000}], [{:body_format,:binary}])
+      json = :jsone.decode(body)
+      :lists.map fn map  -> 
+                     title = :maps.get "title", map, []
+                     id = :maps.get "id", map, []
+                     {id,title} end, json
+  end
+
+  def catLotStatuses() do
+      url = :application.get_env(:n2o, :tender_upload, []) ++ 'ReferenceBooks/lotStatuses'
+      bearer = :application.get_env(:n2o, :tender_bearer, [])
+      headers = [{'Authorization',bearer},{'accept','*'}]
+      {:ok,{status,_headers,body}} = :httpc.request(:get, {url, headers},
+                                     [{:timeout,100000}], [{:body_format,:binary}])
+      json = :jsone.decode(body)
+      :lists.map fn map  -> 
+                     title = :maps.get "title", map, []
+                     id = :maps.get "id", map, []
+                     {id,title} end, json
+  end
+
+  def catUnits() do
+      url = :application.get_env(:n2o, :tender_upload, []) ++ 'ReferenceBooks/units'
+      bearer = :application.get_env(:n2o, :tender_bearer, [])
+      headers = [{'Authorization',bearer},{'accept','*'}]
+      {:ok,{status,_headers,body}} = :httpc.request(:get, {url, headers},
+                                     [{:timeout,100000}], [{:body_format,:binary}])
+      json = :jsone.decode(body)
+      :lists.map fn map  -> 
+                     title = :maps.get "title", map, []
+                     shortTitle = :maps.get "shortTitle", map, []
+                     id = :maps.get "id", map, []
+                     {id,shortTitle,title} end, json
+  end
+
 end
