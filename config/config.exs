@@ -1,5 +1,8 @@
 use Mix.Config
 
+config :inets,
+  logger_level: :error
+
 config :n2o,
   tables: [:cookies, :file, :web, :caching, :async, :tender],
   logger: [{:handler, :synrc, :logger_std_h,
@@ -9,4 +12,4 @@ config :n2o,
   tender_bearer: 'Basic 1',
   jwt_prod: false,
   login: "Максим Сохацький",
-  logger_level: :info
+  logger_level: :error
