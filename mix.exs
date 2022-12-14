@@ -4,7 +4,7 @@ defmodule TENDER.Mixfile do
   def project do
     [
       app: :tender,
-      version: "0.11.0",
+      version: "0.12.0",
       description: "TENDER Smart Tender Prozorro Middleware",
       package: package(),
       deps: deps()
